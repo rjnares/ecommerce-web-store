@@ -3,16 +3,20 @@ import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
+import { Link } from "react-router-dom";
 
 import useStyles from "./styles";
-import CardItem from "./CartItem/CartItem";
+import CartItem from "./CartItem/CartItem";
 
 const Cart = ({ cart }) => {
   const classes = useStyles();
 
   const EmptyCart = () => (
     <Typography variant="subtitle1">
-      Your shopping cart is empty. Go buy stuff!
+      Your shopping cart is empty,
+      <Link to="/" className={classes.link}>
+        go buy stuff!
+      </Link>
     </Typography>
   );
 
@@ -21,7 +25,7 @@ const Cart = ({ cart }) => {
       <Grid container spacing={3}>
         {cart.line_items.map((item) => (
           <Grid item xs={12} sm={4} key={item.id}>
-            <CardItem item={item} />
+            <CartItem item={item} />
           </Grid>
         ))}
       </Grid>
