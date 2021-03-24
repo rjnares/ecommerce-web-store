@@ -13,7 +13,7 @@ const FormInput = ({ name, label, required }) => {
         fullWidth
         name={name}
         label={label}
-        required={required}
+        required
       />
     </Grid>
   );
