@@ -95,15 +95,17 @@ const App = () => {
     fetchCart();
   }, []);
 
-  return loading ? (
-    <LoadingState />
-  ) : (
+  return (
     <Router>
       <div>
         <Navbar totalItems={cart.total_items} />
         <Switch>
           <Route exact path="/">
-            <Products products={products} onAddToCart={handleAddToCart} />
+            {loading ? (
+              <LoadingState msg={"Fetching Products"} />
+            ) : (
+              <Products products={products} onAddToCart={handleAddToCart} />
+            )}
           </Route>
           <Route exact path="/cart">
             <Cart
