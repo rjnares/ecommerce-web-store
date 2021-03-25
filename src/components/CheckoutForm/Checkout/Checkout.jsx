@@ -7,6 +7,7 @@ import Typography from "@material-ui/core/Typography";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Divider from "@material-ui/core/Divider";
 import Button from "@material-ui/core/Button";
+import { Link, useHistory } from "react-router-dom";
 
 import useStyles from "./styles";
 import AddressForm from "../AddressForm";
@@ -16,12 +17,13 @@ import { commerce } from "../../../lib/commerce";
 
 const steps = ["Shipping address", "Payment details"];
 
-const Checkout = ({ cart }) => {
+const Checkout = ({ cart, order, onCaptureCheckout, error }) => {
   const [activeStep, setActiveStep] = useState(0);
   const [checkoutToken, setCheckoutToken] = useState(null);
   const [shippingData, setShippingData] = useState({});
 
   const classes = useStyles();
+  const history = useHistory();
 
   useEffect(() => {
     const generateToken = async () => {
@@ -30,7 +32,10 @@ const Checkout = ({ cart }) => {
           type: "cart",
         });
         setCheckoutToken(token);
-      } catch (error) {}
+      } catch (error) {
+        console.log(error);
+        if (activeStep !== steps.length) history.pushState("/");
+      }
     };
 
     generateToken();
@@ -44,13 +49,53 @@ const Checkout = ({ cart }) => {
     nextStep();
   };
 
-  const Confirmation = () => <div>Confirmation</div>;
+  let Confirmation = () =>
+    order.customer ? (
+      <React.Fragment>
+        <div>
+          <Typography variant="h5">
+            Thank you for your purchase, {order.customer.firstname}{" "}
+            {order.customer.lastname}!
+          </Typography>
+          <Divider className={classes.divider} />
+          <Typography variant="subtitle2">
+            Order ref: {order.customer_reference}
+          </Typography>
+        </div>
+        <br />
+        <Button component={Link} to="/" variant="outlined" type="button">
+          Back to Home
+        </Button>
+      </React.Fragment>
+    ) : (
+      <div className={classes.spinner}>
+        <CircularProgress />
+      </div>
+    );
+
+  if (error) {
+    Confirmation = () => (
+      <React.Fragment>
+        <Typography variant="h5">Error: {error}</Typography>
+        <br />
+        <Button component={Link} to="/" variant="outlined" type="button">
+          Back to Home
+        </Button>
+      </React.Fragment>
+    );
+  }
 
   const Form = () =>
     activeStep === 0 ? (
       <AddressForm checkoutToken={checkoutToken} next={next} />
     ) : (
-      <PaymentForm shippingData={shippingData} checkoutToken={checkoutToken} />
+      <PaymentForm
+        shippingData={shippingData}
+        checkoutToken={checkoutToken}
+        backStep={backStep}
+        onCaptureCheckout={onCaptureCheckout}
+        nextStep={nextStep}
+      />
     );
 
   return (
