@@ -7,6 +7,7 @@ import Typography from "@material-ui/core/Typography";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Divider from "@material-ui/core/Divider";
 import Button from "@material-ui/core/Button";
+import CssBaseline from "@material-ui/core/CssBaseline";
 import { Link, useHistory } from "react-router-dom";
 
 import useStyles from "./styles";
@@ -34,7 +35,7 @@ const Checkout = ({ cart, order, onCaptureCheckout, error }) => {
         setCheckoutToken(token);
       } catch (error) {
         console.log(error);
-        if (activeStep !== steps.length) history.pushState("/");
+        if (activeStep !== steps.length) history.push("/");
       }
     };
 
@@ -100,6 +101,7 @@ const Checkout = ({ cart, order, onCaptureCheckout, error }) => {
 
   return (
     <React.Fragment>
+      <CssBaseline />
       <div className={classes.toolbar} />
       <main className={classes.layout}>
         <Paper className={classes.paper}>
