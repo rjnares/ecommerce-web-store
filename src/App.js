@@ -24,48 +24,61 @@ const App = () => {
   };
 
   const fetchCart = async () => {
-    try {
-      const data = await commerce.cart.retrieve();
-      setCart(data);
-    } catch (error) {
-      console.log(`[App::fetchCart] ${error}`);
-    }
+    await commerce.cart
+      .retrieve()
+      .then((cart) => {
+        setCart(cart);
+      })
+      .catch((error) => {
+        console.error("There was an error fetching the cart", error);
+      });
   };
 
   const handleAddToCart = async (productId, quantity) => {
-    try {
-      const { cart } = await commerce.cart.add(productId, quantity);
-      setCart(cart);
-    } catch (error) {
-      console.log(`[App::handleAddToCart] ${error}`);
-    }
+    await commerce.cart
+      .add(productId, quantity)
+      .then((item) => {
+        setCart(item.cart);
+      })
+      .catch((error) => {
+        console.error("There was an error adding the item to the cart", error);
+      });
   };
 
-  const handleUpdateCartItemQty = async (productId, quantity) => {
-    try {
-      const { cart } = await commerce.cart.update(productId, { quantity });
-      setCart(cart);
-    } catch (error) {
-      console.log(`[App::handleUpdateCartItemQty] ${error}`);
-    }
+  const handleUpdateCartItemQty = async (lineItemId, quantity) => {
+    await commerce.cart
+      .update(lineItemId, { quantity })
+      .then((resp) => {
+        setCart(resp.cart);
+      })
+      .catch((error) => {
+        console.log("There was an error updating the cart items", error);
+      });
   };
 
-  const handleRemoveCartItem = async (productId) => {
-    try {
-      const { cart } = await commerce.cart.remove(productId);
-      setCart(cart);
-    } catch (error) {
-      console.log(`[App::handleRemoveCartItem] ${error}`);
-    }
+  const handleRemoveCartItem = async (lineItemId) => {
+    await commerce.cart
+      .remove(lineItemId)
+      .then((resp) => {
+        setCart(resp.cart);
+      })
+      .catch((error) => {
+        console.error(
+          "There was an error removing the item from the cart",
+          error
+        );
+      });
   };
 
   const handleEmptyCart = async () => {
-    try {
-      const { cart } = await commerce.cart.empty();
-      setCart(cart);
-    } catch (error) {
-      console.log(`[App::handleEmptyCart] ${error}`);
-    }
+    await commerce.cart
+      .empty()
+      .then((resp) => {
+        setCart(resp.cart);
+      })
+      .catch((error) => {
+        console.error("There was an error emptying the cart", error);
+      });
   };
 
   const refreshCart = async () => {
