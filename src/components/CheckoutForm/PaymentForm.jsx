@@ -19,6 +19,7 @@ const PaymentForm = ({
   backStep,
   onCaptureCheckout,
   nextStep,
+  timeout,
 }) => {
   const handleSubmit = async (event, elements, stripe) => {
     event.preventDefault();
@@ -31,7 +32,7 @@ const PaymentForm = ({
     });
 
     if (error) {
-      console.log(error);
+      console.log(`[PaymentForm::handleSubmit] ${error}`);
     } else {
       const orderData = {
         line_items: checkoutToken.live.line_items,
@@ -58,6 +59,7 @@ const PaymentForm = ({
       };
 
       onCaptureCheckout(checkoutToken.id, orderData);
+      timeout();
       nextStep();
     }
   };

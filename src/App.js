@@ -11,38 +11,66 @@ const App = () => {
   const [errorMessage, setErrorMessage] = useState("");
 
   const fetchProducts = async () => {
-    const { data } = await commerce.products.list();
-    setProducts(data);
+    try {
+      const { data } = await commerce.products.list();
+      setProducts(data);
+    } catch (error) {
+      console.log(`[App::fetchProducts] ${error}`);
+    }
   };
 
   const fetchCart = async () => {
-    const data = await commerce.cart.retrieve();
-    setCart(data);
+    try {
+      const data = await commerce.cart.retrieve();
+      setCart(data);
+    } catch (error) {
+      console.log(`[App::fetchCart] ${error}`);
+    }
   };
 
   const handleAddToCart = async (productId, quantity) => {
-    const { cart } = await commerce.cart.add(productId, quantity);
-    setCart(cart);
+    try {
+      const { cart } = await commerce.cart.add(productId, quantity);
+      setCart(cart);
+    } catch (error) {
+      console.log(`[App::handleAddToCart] ${error}`);
+    }
   };
 
   const handleUpdateCartItemQty = async (productId, quantity) => {
-    const { cart } = await commerce.cart.update(productId, { quantity });
-    setCart(cart);
+    try {
+      const { cart } = await commerce.cart.update(productId, { quantity });
+      setCart(cart);
+    } catch (error) {
+      console.log(`[App::handleUpdateCartItemQty] ${error}`);
+    }
   };
 
   const handleRemoveCartItem = async (productId) => {
-    const { cart } = await commerce.cart.remove(productId);
-    setCart(cart);
+    try {
+      const { cart } = await commerce.cart.remove(productId);
+      setCart(cart);
+    } catch (error) {
+      console.log(`[App::handleRemoveCartItem] ${error}`);
+    }
   };
 
   const handleEmptyCart = async () => {
-    const { cart } = await commerce.cart.empty();
-    setCart(cart);
+    try {
+      const { cart } = await commerce.cart.empty();
+      setCart(cart);
+    } catch (error) {
+      console.log(`[App::handleEmptyCart] ${error}`);
+    }
   };
 
   const refreshCart = async () => {
-    const newCart = await commerce.cart.refresh();
-    setCart(newCart);
+    try {
+      const newCart = await commerce.cart.refresh();
+      setCart(newCart);
+    } catch (error) {
+      console.log(`[App::refreshCart] ${error}`);
+    }
   };
 
   const handleCaptureCheckout = async (checkoutTokenId, newOrder) => {
