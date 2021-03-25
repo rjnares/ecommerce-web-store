@@ -2,21 +2,25 @@ import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 import { commerce } from "./lib/commerce";
-import { Products, Navbar, Cart, Checkout } from "./components";
+import { Products, Navbar, Cart, Checkout, LoadingState } from "./components";
 
 const App = () => {
   const [products, setProducts] = useState([]);
   const [cart, setCart] = useState({});
   const [order, setOrder] = useState({});
   const [errorMessage, setErrorMessage] = useState("");
+  const [loading, setLoading] = useState(true);
 
   const fetchProducts = async () => {
-    try {
-      const { data } = await commerce.products.list();
-      setProducts(data);
-    } catch (error) {
-      console.log(`[App::fetchProducts] ${error}`);
-    }
+    await commerce.products
+      .list()
+      .then((products) => {
+        setProducts(products.data);
+      })
+      .catch((error) => {
+        console.log("There was an error fetching the products", error);
+      })
+      .finally(() => setLoading(false));
   };
 
   const fetchCart = async () => {
@@ -91,7 +95,9 @@ const App = () => {
     fetchCart();
   }, []);
 
-  return (
+  return loading ? (
+    <LoadingState />
+  ) : (
     <Router>
       <div>
         <Navbar totalItems={cart.total_items} />
