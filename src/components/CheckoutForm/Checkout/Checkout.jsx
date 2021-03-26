@@ -8,7 +8,7 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import Divider from "@material-ui/core/Divider";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
-import { Link, useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 import useStyles from "./styles";
 import AddressForm from "../AddressForm";
@@ -18,28 +18,30 @@ import { commerce } from "../../../lib/commerce";
 
 const steps = ["Shipping address", "Payment details"];
 
-const Checkout = ({ cart, order, onCaptureCheckout, error }) => {
+const Checkout = ({ cart, order, onCaptureCheckout, checkoutErrorMsg }) => {
   const [activeStep, setActiveStep] = useState(0);
   const [checkoutToken, setCheckoutToken] = useState(null);
   const [shippingData, setShippingData] = useState({});
   const [isFinished, setIsFinished] = useState(false);
+  const [loading, setLoading] = useState(true);
   const classes = useStyles();
 
   useEffect(() => {
-    const generateToken = async () => {
-      if (cart.line_items.length) {
-        await commerce.checkout
+    const generateCheckoutToken = () => {
+      if (cart && cart.line_items && cart.line_items.length) {
+        commerce.checkout
           .generateToken(cart.id, { type: "cart" })
           .then((token) => {
             setCheckoutToken(token);
           })
           .catch((error) => {
             console.log("There was an error in generating a token", error);
-          });
+          })
+          .finally(() => setLoading(false));
       }
     };
 
-    generateToken();
+    generateCheckoutToken();
   }, [cart]);
 
   const nextStep = () => setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -91,10 +93,10 @@ const Checkout = ({ cart, order, onCaptureCheckout, error }) => {
       </div>
     );
 
-  if (error) {
+  if (checkoutErrorMsg) {
     Confirmation = () => (
       <React.Fragment>
-        <Typography variant="h5">Error: {error}</Typography>
+        <Typography variant="h5">Error: {checkoutErrorMsg}</Typography>
         <br />
         <Button component={Link} to="/" variant="outlined" type="button">
           Back to Home
@@ -135,7 +137,11 @@ const Checkout = ({ cart, order, onCaptureCheckout, error }) => {
               );
             })}
           </Stepper>
-          {activeStep === steps.length ? (
+          {loading ? (
+            <div className={classes.spinner}>
+              <CircularProgress />
+            </div>
+          ) : activeStep === steps.length ? (
             <Confirmation />
           ) : (
             checkoutToken && <Form />

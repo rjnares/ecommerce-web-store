@@ -8,8 +8,8 @@ const App = () => {
   const [products, setProducts] = useState([]);
   const [cart, setCart] = useState({});
   const [order, setOrder] = useState({});
-  const [errorMessage, setErrorMessage] = useState("");
   const [loading, setLoading] = useState(true);
+  const [checkoutErrorMsg, setCheckoutErrorMsg] = useState("");
 
   const fetchProducts = async () => {
     await commerce.products
@@ -81,26 +81,38 @@ const App = () => {
       });
   };
 
-  const refreshCart = async () => {
-    try {
-      const newCart = await commerce.cart.refresh();
-      setCart(newCart);
-    } catch (error) {
-      console.log(`[App::refreshCart] ${error}`);
-    }
+  const refreshCart = () => {
+    commerce.cart
+      .refresh()
+      .then((newCart) => {
+        setCart(newCart);
+      })
+      .catch((error) => {
+        console.log("There was an error refreshing your cart", error);
+      });
   };
 
-  const handleCaptureCheckout = async (checkoutTokenId, newOrder) => {
-    try {
-      const incomingOrder = await commerce.checkout.capture(
-        checkoutTokenId,
-        newOrder
-      );
-      setOrder(incomingOrder);
-      refreshCart();
-    } catch (error) {
-      setErrorMessage(error.data.error.message);
-    }
+  const handleCaptureCheckout = (checkoutTokenId, newOrder) => {
+    commerce.checkout
+      .capture(checkoutTokenId, newOrder)
+      .then((order) => {
+        // Save the order into state
+        setOrder(order);
+
+        // Clear the cart
+        refreshCart();
+
+        // // Send the user to the receipt
+        // this.props.history.push('/confirmation');
+
+        // Store the order in session storage so we can show it again if the
+        // user refreshes the page!
+        window.sessionStorage.setItem("order_receipt", JSON.stringify(order));
+      })
+      .catch((error) => {
+        console.log("There was an error confirming your order", error);
+        setCheckoutErrorMsg(error.data.error.message);
+      });
   };
 
   useEffect(() => {
@@ -133,7 +145,7 @@ const App = () => {
               cart={cart}
               order={order}
               onCaptureCheckout={handleCaptureCheckout}
-              error={errorMessage}
+              checkoutErrorMsg={checkoutErrorMsg}
             />
           </Route>
         </Switch>

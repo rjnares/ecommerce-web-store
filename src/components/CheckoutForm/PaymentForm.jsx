@@ -32,7 +32,10 @@ const PaymentForm = ({
     });
 
     if (error) {
-      console.log(`[PaymentForm::handleSubmit] ${error}`);
+      console.error(
+        "There was an error creating a stripe payment method ",
+        error
+      );
     } else {
       const orderData = {
         line_items: checkoutToken.live.line_items,

@@ -5,6 +5,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
+import CircularProgress from "@material-ui/core/CircularProgress";
 import { Link } from "react-router-dom";
 import { useForm, FormProvider } from "react-hook-form";
 
@@ -19,6 +20,7 @@ const AddressForm = ({ checkoutToken, next }) => {
   const [shippingSubdivision, setShippingSubdivision] = useState("");
   const [shippingOptions, setShippingOptions] = useState([]);
   const [shippingOption, setShippingOption] = useState("");
+  const [loading, setLoading] = useState(true);
 
   const countries = Object.entries(shippingCountries).map(([code, name]) => ({
     id: code,
@@ -39,51 +41,65 @@ const AddressForm = ({ checkoutToken, next }) => {
 
   const methods = useForm();
 
-  const fetchShippingCountries = async (checkoutTokenId) => {
-    const { countries } = await commerce.services.localeListShippingCountries(
-      checkoutTokenId
-    );
-    setShippingCountries(countries);
-    setShippingCountry(Object.keys(countries)[0]);
+  const fetchShippingCountries = (checkoutTokenId) => {
+    commerce.services
+      .localeListShippingCountries(checkoutTokenId)
+      .then((countries) => {
+        setShippingCountries(countries.countries);
+        setShippingCountry(Object.keys(countries.countries)[0]);
+      })
+      .catch((error) => {
+        console.log(
+          "There was an error fetching a list of shipping countries",
+          error
+        );
+      });
   };
 
-  const fetchShippingSubdivisions = async (countryCode) => {
-    const { subdivisions } = await commerce.services.localeListSubdivisions(
-      countryCode
-    );
-    setShippingSubdivisions(subdivisions);
-    setShippingSubdivision(Object.keys(subdivisions)[0]);
+  const fetchShippingSubdivisions = (countryCode) => {
+    commerce.services
+      .localeListSubdivisions(countryCode)
+      .then((subdivisions) => {
+        setShippingSubdivisions(subdivisions.subdivisions);
+        setShippingSubdivision(Object.keys(subdivisions.subdivisions)[0]);
+      })
+      .catch((error) => {
+        console.log("There was an error fetching the subdivisions", error);
+      });
   };
 
-  const fetchShippingOptions = async (
+  const fetchShippingOptions = (
     checkoutTokenId,
     country,
     stateProvince = null
   ) => {
-    const options = await commerce.checkout.getShippingOptions(
-      checkoutTokenId,
-      { country: country, region: stateProvince }
-    );
-    setShippingOptions(options);
-    setShippingOption(options[0].id);
+    commerce.checkout
+      .getShippingOptions(checkoutTokenId, {
+        country: country,
+        region: stateProvince,
+      })
+      .then((options) => {
+        setShippingOptions(options);
+        setShippingOption(options[0] ? options[0].id : null);
+      })
+      .catch((error) => {
+        console.log("There was an error fetching the shipping methods", error);
+      })
+      .finally(() => setLoading(false));
   };
 
   useEffect(() => {
     fetchShippingCountries(checkoutToken.id);
-  }, []);
+  }, [checkoutToken]);
 
   useEffect(() => {
     if (shippingCountry) fetchShippingSubdivisions(shippingCountry);
   }, [shippingCountry]);
 
   useEffect(() => {
-    if (shippingSubdivision)
-      fetchShippingOptions(
-        checkoutToken.id,
-        shippingCountry,
-        shippingSubdivision
-      );
-  }, [shippingSubdivision]);
+    if (shippingCountry)
+      fetchShippingOptions(checkoutToken.id, shippingCountry);
+  }, [checkoutToken, shippingCountry]);
 
   return (
     <React.Fragment>
@@ -108,48 +124,65 @@ const AddressForm = ({ checkoutToken, next }) => {
             <FormInput name="email" label="Email" />
             <FormInput name="city" label="City" />
             <FormInput name="zip" label="ZIP / Postal code" />
-            <Grid item xs={12} sm={6}>
-              <InputLabel>Shipping Country</InputLabel>
-              <Select
-                value={shippingCountry}
-                fullWidth
-                onChange={(e) => setShippingCountry(e.target.value)}
+            {loading ? (
+              <div
+                styles={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
               >
-                {countries.map((country) => (
-                  <MenuItem key={country.id} value={country.id}>
-                    {country.label}
-                  </MenuItem>
-                ))}
-              </Select>
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <InputLabel>Shipping Subdivision</InputLabel>
-              <Select
-                value={shippingSubdivision}
-                fullWidth
-                onChange={(e) => setShippingSubdivision(e.target.value)}
-              >
-                {subdivisions.map((subdivision) => (
-                  <MenuItem key={subdivision.id} value={subdivision.id}>
-                    {subdivision.label}
-                  </MenuItem>
-                ))}
-              </Select>
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <InputLabel>Shipping Options</InputLabel>
-              <Select
-                value={shippingOption}
-                fullWidth
-                onChange={(e) => setShippingOption(e.target.value)}
-              >
-                {options.map((option) => (
-                  <MenuItem key={option.id} value={option.id}>
-                    {option.label}
-                  </MenuItem>
-                ))}
-              </Select>
-            </Grid>
+                <CircularProgress />
+              </div>
+            ) : (
+              <React.Fragment>
+                <Grid item xs={12} sm={6}>
+                  <InputLabel>Shipping Country</InputLabel>
+                  <Select
+                    value={shippingCountry}
+                    fullWidth
+                    onChange={(e) => {
+                      setLoading(true);
+                      setShippingCountry(e.target.value);
+                    }}
+                  >
+                    {countries.map((country) => (
+                      <MenuItem key={country.id} value={country.id}>
+                        {country.label}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <InputLabel>Shipping Subdivision</InputLabel>
+                  <Select
+                    value={shippingSubdivision}
+                    fullWidth
+                    onChange={(e) => setShippingSubdivision(e.target.value)}
+                  >
+                    {subdivisions.map((subdivision) => (
+                      <MenuItem key={subdivision.id} value={subdivision.id}>
+                        {subdivision.label}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <InputLabel>Shipping Options</InputLabel>
+                  <Select
+                    value={shippingOption}
+                    fullWidth
+                    onChange={(e) => setShippingOption(e.target.value)}
+                  >
+                    {options.map((option) => (
+                      <MenuItem key={option.id} value={option.id}>
+                        {option.label}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </Grid>
+              </React.Fragment>
+            )}
           </Grid>
           <br />
           <div style={{ display: "flex", justifyContent: "space-between" }}>
