@@ -41,12 +41,33 @@ const AddressForm = ({ checkoutToken, next }) => {
 
   const methods = useForm();
 
-  const fetchShippingCountries = (checkoutTokenId) => {
-    commerce.services
-      .localeListShippingCountries(checkoutTokenId)
+  const fetchShippingCountries = async (checkoutTokenId) => {
+    return await commerce.services.localeListShippingCountries(checkoutTokenId);
+  };
+
+  const fetchShippingSubdivisions = async (countryCode) => {
+    return await commerce.services.localeListSubdivisions(countryCode);
+  };
+
+  const fetchShippingOptions = async (
+    checkoutTokenId,
+    country,
+    stateProvince = null
+  ) => {
+    return await commerce.checkout.getShippingOptions(checkoutTokenId, {
+      country: country,
+      region: stateProvince,
+    });
+  };
+
+  useEffect(() => {
+    let isMounted = true;
+    fetchShippingCountries(checkoutToken.id)
       .then((countries) => {
-        setShippingCountries(countries.countries);
-        setShippingCountry(Object.keys(countries.countries)[0]);
+        if (isMounted) {
+          setShippingCountries(countries.countries);
+          setShippingCountry(Object.keys(countries.countries)[0]);
+        }
       })
       .catch((error) => {
         console.log(
@@ -54,51 +75,51 @@ const AddressForm = ({ checkoutToken, next }) => {
           error
         );
       });
-  };
-
-  const fetchShippingSubdivisions = (countryCode) => {
-    commerce.services
-      .localeListSubdivisions(countryCode)
-      .then((subdivisions) => {
-        setShippingSubdivisions(subdivisions.subdivisions);
-        setShippingSubdivision(Object.keys(subdivisions.subdivisions)[0]);
-      })
-      .catch((error) => {
-        console.log("There was an error fetching the subdivisions", error);
-      });
-  };
-
-  const fetchShippingOptions = (
-    checkoutTokenId,
-    country,
-    stateProvince = null
-  ) => {
-    commerce.checkout
-      .getShippingOptions(checkoutTokenId, {
-        country: country,
-        region: stateProvince,
-      })
-      .then((options) => {
-        setShippingOptions(options);
-        setShippingOption(options[0] ? options[0].id : null);
-      })
-      .catch((error) => {
-        console.log("There was an error fetching the shipping methods", error);
-      })
-      .finally(() => setLoading(false));
-  };
-
-  useEffect(() => {
-    fetchShippingCountries(checkoutToken.id);
+    return () => {
+      isMounted = false;
+    };
   }, [checkoutToken]);
 
   useEffect(() => {
-    if (shippingCountry) fetchShippingSubdivisions(shippingCountry);
+    if (shippingCountry) {
+      let isMounted = true;
+      fetchShippingSubdivisions(shippingCountry)
+        .then((subdivisions) => {
+          if (isMounted) {
+            setShippingSubdivisions(subdivisions.subdivisions);
+            setShippingSubdivision(Object.keys(subdivisions.subdivisions)[0]);
+          }
+        })
+        .catch((error) => {
+          console.log("There was an error fetching the subdivisions", error);
+        });
+      return () => {
+        isMounted = false;
+      };
+    }
   }, [shippingCountry]);
 
   useEffect(() => {
-    if (shippingCountry)
-      fetchShippingOptions(checkoutToken.id, shippingCountry);
+    if (shippingCountry) {
+      let isMounted = true;
+      fetchShippingOptions(checkoutToken.id, shippingCountry)
+        .then((options) => {
+          if (isMounted) {
+            setShippingOptions(options);
+            setShippingOption(options[0] ? options[0].id : null);
+          }
+        })
+        .catch((error) => {
+          console.log(
+            "There was an error fetching the shipping options",
+            error
+          );
+        })
+        .finally(() => setLoading(false));
+      return () => {
+        isMounted = false;
+      };
+    }
   }, [checkoutToken, shippingCountry]);
 
   return (
