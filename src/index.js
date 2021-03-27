@@ -3,15 +3,31 @@ import ReactDOM from "react-dom";
 import App from "./App";
 
 import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
+import CssBaseline from "@material-ui/core/CssBaseline";
+import orange from "@material-ui/core/colors/orange";
+import grey from "@material-ui/core/colors/grey";
 
 const theme = createMuiTheme({
   palette: {
     type: "dark",
+    primary: {
+      light: orange[100],
+      main: orange[500],
+      dark: orange[800],
+      contrastText: grey[900],
+    },
+    secondary: {
+      light: grey[100],
+      main: grey[500],
+      dark: grey[700],
+      contrastText: grey[900],
+    },
   },
 });
 
 ReactDOM.render(
   <ThemeProvider theme={theme}>
+    <CssBaseline />
     <App />
   </ThemeProvider>,
   document.getElementById("root")
