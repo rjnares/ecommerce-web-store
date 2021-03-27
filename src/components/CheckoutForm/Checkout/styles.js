@@ -49,4 +49,16 @@ export default makeStyles((theme) => ({
     justifyContent: "center",
     alignItems: "center",
   },
+  confirmationSuccess: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+  },
+  icon: {
+    marginBottom: "50px",
+  },
+  buttonsContainer: {
+    display: "flex",
+    justifyContent: "space-evenly",
+  },
 }));

@@ -107,11 +107,12 @@ const App = () => {
 
         // Store the order in session storage so we can show it again if the
         // user refreshes the page!
-        window.sessionStorage.setItem("order_receipt", JSON.stringify(order));
+        sessionStorage.setItem("order_receipt", JSON.stringify(order));
       })
       .catch((error) => {
-        console.log("There was an error confirming your order", error);
         setCheckoutErrorMsg(error.data.error.message);
+        sessionStorage.setItem("order_error", JSON.stringify(error.data.error));
+        console.log("There was an error confirming your order", error);
       });
   };
 
