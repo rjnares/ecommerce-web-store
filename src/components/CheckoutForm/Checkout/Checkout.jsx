@@ -6,7 +6,6 @@ import StepLabel from "@material-ui/core/StepLabel";
 import Typography from "@material-ui/core/Typography";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import CheckCircleOutlineIcon from "@material-ui/icons/CheckCircleOutline";
-import Divider from "@material-ui/core/Divider";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import { Link, useHistory } from "react-router-dom";
@@ -14,7 +13,6 @@ import { Link, useHistory } from "react-router-dom";
 import useStyles from "./styles";
 import AddressForm from "../AddressForm";
 import PaymentForm from "../PaymentForm";
-import ViewOrder from "../ViewOrder/ViewOrder";
 
 import { commerce } from "../../../lib/commerce";
 
@@ -68,7 +66,7 @@ const Checkout = ({ cart, onCaptureCheckout, checkoutErrorMsg }) => {
           </Button>
           <Button
             component={Link}
-            to="/ViewOrder"
+            to="/view-order"
             variant="contained"
             type="button"
             color="primary"

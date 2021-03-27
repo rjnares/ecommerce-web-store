@@ -2,7 +2,14 @@ import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 import { commerce } from "./lib/commerce";
-import { Products, Navbar, Cart, Checkout, LoadingState } from "./components";
+import {
+  Products,
+  Navbar,
+  Cart,
+  Checkout,
+  LoadingState,
+  ViewOrder,
+} from "./components";
 
 const App = () => {
   const [products, setProducts] = useState([]);
@@ -148,6 +155,9 @@ const App = () => {
               onCaptureCheckout={handleCaptureCheckout}
               checkoutErrorMsg={checkoutErrorMsg}
             />
+          </Route>
+          <Route exact path="/view-order">
+            <ViewOrder />
           </Route>
         </Switch>
       </div>
