@@ -77,7 +77,15 @@ const PaymentForm = ({
         <ElementsConsumer>
           {({ elements, stripe }) => (
             <form onSubmit={(e) => handleSubmit(e, elements, stripe)}>
-              <CardElement />
+              <CardElement
+                options={{
+                  style: {
+                    base: {
+                      color: "#fff",
+                    },
+                  },
+                }}
+              />
               <br />
               <br />
               <div style={{ display: "flex", justifyContent: "space-between" }}>

@@ -5,8 +5,7 @@ import Step from "@material-ui/core/Step";
 import StepLabel from "@material-ui/core/StepLabel";
 import Typography from "@material-ui/core/Typography";
 import CircularProgress from "@material-ui/core/CircularProgress";
-import CheckCircleOutlineIcon from "@material-ui/icons/CheckCircleOutline";
-import Button from "@material-ui/core/Button";
+import CheckCircleIcon from '@material-ui/icons/CheckCircle';import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import { Link, useHistory } from "react-router-dom";
 
@@ -52,7 +51,7 @@ const Checkout = ({ cart, onCaptureCheckout, checkoutErrorMsg }) => {
           Thank you for your order!
         </Typography>
         <div className={classes.icon}>
-          <CheckCircleOutlineIcon fontSize="large" color="primary" />
+          <CheckCircleIcon color="success" style={{fontSize:50}}/>
         </div>
         <div
           style={{
