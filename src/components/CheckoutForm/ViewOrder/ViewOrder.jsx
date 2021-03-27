@@ -6,6 +6,7 @@ import Button from "@material-ui/core/Button";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
+import ErrorOutlineIcon from "@material-ui/icons/ErrorOutline";
 
 import { Link } from "react-router-dom";
 
@@ -21,16 +22,20 @@ const ViewOrder = () => {
       <main className={classes.layout}>
         <div className={classes.content}>
           <div className={classes.header}>
-            <Typography variant="h4">Thank you for you purchase, </Typography>
-            <Typography variant="h4" gutterBottom>
+            <Typography variant="h4" align="center" gutterBottom>
+              Thank you for your purchase,{" "}
+            </Typography>
+            <Typography variant="h4" gutterBottom align="center">
               {orderReceipt.customer.firstname} {orderReceipt.customer.lastname}
             </Typography>
-            <Typography variant="h5">
-              Your latest order: #{orderReceipt.customer_reference}
+            <Typography variant="h5" align="center">
+              Your latest order:
+            </Typography>
+            <Typography variant="h5" align="center">
+              {orderReceipt.customer_reference}
             </Typography>
           </div>
           <Divider className={classes.divider} />
-          <br />
           <List disablePadding>
             {orderReceipt.order.line_items.map((item) => (
               <ListItem styles={{ padding: "10px 0" }} key={item.name}>
@@ -43,6 +48,7 @@ const ViewOrder = () => {
                 </Typography>
               </ListItem>
             ))}
+            <Divider className={classes.divider} />
             <ListItem styles={{ padding: "10px 0" }}>
               <ListItemText primary="Total" />
               <Typography variant="subtitle1" style={{ fontWeight: 700 }}>
@@ -60,6 +66,7 @@ const ViewOrder = () => {
         >
           Back to Home
         </Button>
+        <div className={classes.footer} />
       </main>
     </React.Fragment>
   ) : (
@@ -68,8 +75,13 @@ const ViewOrder = () => {
       <main className={classes.content}>
         <div className={classes.layout}>
           <div className={classes.header}>
+            <Typography variant="h4" align="center" gutterBottom>
+              Oops!
+            </Typography>
+            <ErrorOutlineIcon color="error" style={{ fontSize: 50 }} />
+            <div style={{ height: 20 }} />
             <Typography variant="h4" align="center">
-              Error: could not access order information
+              Error: no order info
             </Typography>
           </div>
           <Button

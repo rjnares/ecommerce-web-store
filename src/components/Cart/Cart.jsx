@@ -17,7 +17,7 @@ const Cart = ({
   const classes = useStyles();
 
   const EmptyCart = () => (
-    <Typography variant="subtitle1">
+    <Typography variant="h5" align="center">
       Your shopping cart is empty,{" "}
       <Link to="/" className={classes.link}>
         go buy stuff!
@@ -27,7 +27,7 @@ const Cart = ({
 
   const FilledCart = () => (
     <React.Fragment>
-      <Grid container spacing={3}>
+      <Grid container justify="center" spacing={3}>
         {cart.line_items.map((item) => (
           <Grid item xs={12} sm={4} key={item.id}>
             <CartItem
@@ -66,6 +66,7 @@ const Cart = ({
           </Button>
         </div>
       </div>
+      <div style={{height:50}}/>
     </React.Fragment>
   );
 
@@ -74,9 +75,10 @@ const Cart = ({
   return (
     <Container>
       <div className={classes.toolbar} />
-      <Typography className={classes.title} variant="h3" gutterBottom>
-        Your Shopping Cart
+      <Typography className={classes.title} variant="h2" gutterBottom align="center">
+        Shopping Cart
       </Typography>
+      <div style={{height: 30}}/>
       {!cart.line_items.length ? <EmptyCart /> : <FilledCart />}
     </Container>
   );

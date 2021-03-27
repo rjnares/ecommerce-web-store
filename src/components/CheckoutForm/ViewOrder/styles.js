@@ -27,10 +27,14 @@ export default makeStyles((theme) => ({
   },
   divider: {
     margin: "20px 0",
+    borderBottom: "1px solid black",
   },
   spinner: {
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
+  },
+  footer: {
+    height: "60px",
   },
 }));

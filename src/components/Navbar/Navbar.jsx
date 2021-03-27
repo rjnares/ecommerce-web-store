@@ -21,14 +21,12 @@ const Navbar = ({ totalItems }) => {
           <Typography
             component={Link}
             to="/"
-            variant="h6"
+            variant="h4"
             className={classes.title}
-            color="inherit"
           >
             <img
               src={logo}
               alt="CommerceJS"
-              height="30px"
               className={classes.image}
             />
             Rob's Tech
@@ -36,15 +34,14 @@ const Navbar = ({ totalItems }) => {
           <div className={classes.grow}></div>
 
           {location.pathname === "/" && (
-            <div className={classes.button}>
+            <div>
               <IconButton
                 component={Link}
                 to="/cart"
                 aria-label="Shopping Cart"
-                color="inherit"
-              >
+                >
                 <Badge badgeContent={totalItems} color="secondary">
-                  <ShoppingCartIcon />
+                  <ShoppingCartIcon style={{fontSize:30}}/>
                 </Badge>
               </IconButton>
             </div>
