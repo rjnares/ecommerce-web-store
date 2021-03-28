@@ -39,9 +39,9 @@ const Checkout = ({ cart, onCaptureCheckout, checkoutErrorMsg }) => {
   let Confirmation = () =>
     orderError ? (
       <React.Fragment>
-        <Typography variant="h5">Error: {checkoutErrorMsg}</Typography>
+        <Typography  align="center" variant="h5">Error: {checkoutErrorMsg}</Typography>
         <br />
-        <Button component={Link} to="/" variant="outlined" type="button">
+        <Button component={Link} to="/" variant="contained" type="button" color="secondary">
           Back to Home
         </Button>
       </React.Fragment>
@@ -51,7 +51,7 @@ const Checkout = ({ cart, onCaptureCheckout, checkoutErrorMsg }) => {
           Thank you for your order!
         </Typography>
         <div className={classes.icon}>
-          <CheckCircleIcon color="success" style={{fontSize:50}}/>
+          <CheckCircleIcon style={{fontSize:50}}/>
         </div>
         <div
           style={{
@@ -60,7 +60,7 @@ const Checkout = ({ cart, onCaptureCheckout, checkoutErrorMsg }) => {
             width: "100%",
           }}
         >
-          <Button component={Link} to="/" variant="outlined" type="button">
+          <Button component={Link} to="/" variant="contained" type="button" color="secondary" >
             Back to Home
           </Button>
           <Button
