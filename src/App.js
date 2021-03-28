@@ -14,7 +14,7 @@ import {
 const App = () => {
   const [products, setProducts] = useState([]);
   const [cart, setCart] = useState({});
-  const [order, setOrder] = useState({});
+  const [order, setOrder] = useState(null);
   const [loading, setLoading] = useState(true);
   const [checkoutError, setCheckoutError] = useState(null);
 
@@ -106,9 +106,6 @@ const App = () => {
         // Save the order into state
         setOrder(order);
 
-        // Set checkout error to update Checkout component
-        setCheckoutError(null);
-
         // Clear the cart
         refreshCart();
 
@@ -148,6 +145,8 @@ const App = () => {
               handleUpdateCartItemQty={handleUpdateCartItemQty}
               handleRemoveCartItem={handleRemoveCartItem}
               handleEmptyCart={handleEmptyCart}
+              setCheckoutError={setCheckoutError}
+              setOrder={setOrder}
             />
           </Route>
           <Route exact path="/checkout">

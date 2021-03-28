@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useLayoutEffect } from "react";
+import React, { useState, useEffect } from "react";
 import Paper from "@material-ui/core/Paper";
 import Stepper from "@material-ui/core/Stepper";
 import Step from "@material-ui/core/Step";
@@ -18,27 +18,36 @@ import { commerce } from "../../../lib/commerce";
 
 const steps = ["Shipping address", "Payment details"];
 
-const Checkout = ({ cart, onCaptureCheckout, checkoutError }) => {
+const Checkout = ({ cart, order, onCaptureCheckout, checkoutError }) => {
   const [activeStep, setActiveStep] = useState(0);
   const [checkoutToken, setCheckoutToken] = useState(null);
   const [shippingData, setShippingData] = useState({});
   const [isFinished, setIsFinished] = useState(false);
   const [loading, setLoading] = useState(true);
   const [orderError, setOrderError] = useState(null);
+  const [incomingOrder, setIncomingOrder] = useState(null);
 
   const classes = useStyles();
   const history = useHistory();
 
-  useLayoutEffect(() => {
-    setOrderError(checkoutError);
+  useEffect(() => {
+    if (checkoutError) setOrderError(checkoutError);
   }, [checkoutError]);
 
+  useEffect(() => {
+    if (order) setIncomingOrder(order);
+  }, [order]);
+
+  useEffect(() => {
+    if (orderError || incomingOrder) setIsFinished(true);
+  }, [orderError, incomingOrder]);
+
   let Confirmation = () =>
-    isFinished &&
-    checkoutError &&
-    orderError &&
-    checkoutError.message === orderError.message &&
-    checkoutError.type === orderError.type ? (
+    !isFinished ? (
+      <div className={classes.spinner}>
+        <CircularProgress />
+      </div>
+    ) : orderError ? (
       <div className={classes.confirmationError}>
         <Typography align="center" variant="h5">
           Error: {orderError.message}
@@ -92,7 +101,7 @@ const Checkout = ({ cart, onCaptureCheckout, checkoutError }) => {
       </div>
     );
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (!cart.line_items && activeStep === 0) history.push("/cart");
   }, [cart, activeStep, history]);
 
@@ -122,12 +131,6 @@ const Checkout = ({ cart, onCaptureCheckout, checkoutError }) => {
     nextStep();
   };
 
-  const timeout = () => {
-    setTimeout(() => {
-      setIsFinished(true);
-    }, 3000);
-  };
-
   const Form = () =>
     activeStep === 0 ? (
       <AddressForm checkoutToken={checkoutToken} next={next} />
@@ -138,7 +141,6 @@ const Checkout = ({ cart, onCaptureCheckout, checkoutError }) => {
         backStep={backStep}
         onCaptureCheckout={onCaptureCheckout}
         nextStep={nextStep}
-        timeout={timeout}
       />
     );
 

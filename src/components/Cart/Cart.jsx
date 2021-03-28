@@ -12,7 +12,7 @@ const Cart = ({
   cart,
   handleUpdateCartItemQty,
   handleRemoveCartItem,
-  handleEmptyCart,
+  handleEmptyCart, setCheckoutError, setOrder
 }) => {
   const classes = useStyles();
 
@@ -60,7 +60,10 @@ const Cart = ({
             type="button"
             size="large"
             variant="contained"
-            color="primary"
+            color="primary" onClick={() => {
+              setCheckoutError(null);
+              setOrder(null);
+            }}
           >
             Checkout
           </Button>
