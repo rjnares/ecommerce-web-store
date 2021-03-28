@@ -11,7 +11,7 @@ const LoadingState = ({ msg }) => {
   return (
     <div className={classes.root}>
       <CssBaseline />
-      <Typography variant="h4" gutterBottom>
+      <Typography className={classes.title} align="center" variant="h4" gutterBottom>
         {msg}
       </Typography>
       <CircularProgress size="2rem" className={classes.progress} />

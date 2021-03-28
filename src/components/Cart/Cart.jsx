@@ -12,12 +12,14 @@ const Cart = ({
   cart,
   handleUpdateCartItemQty,
   handleRemoveCartItem,
-  handleEmptyCart, setCheckoutError, setOrder
+  handleEmptyCart,
+  setCheckoutError,
+  setOrder,
 }) => {
   const classes = useStyles();
 
   const EmptyCart = () => (
-    <Typography variant="h5" align="center">
+    <Typography variant="h5" align="center" color="secondary">
       Your shopping cart is empty,{" "}
       <Link to="/" className={classes.link}>
         go buy stuff!
@@ -39,10 +41,16 @@ const Cart = ({
         ))}
       </Grid>
       <div className={classes.cartDetails}>
-        <Typography variant="h4">
-          Subtotal: {cart.subtotal.formatted_with_symbol}
-        </Typography>
-        <div>
+        <div className={classes.subtotal}>
+          <Typography variant="h4" align="center">
+            Subtotal:
+          </Typography>
+          <div className={classes.textDivider} />
+          <Typography variant="h4" align="center" color="primary">
+            {cart.subtotal.formatted_with_symbol}
+          </Typography>
+        </div>
+        <div className={classes.cartButtons}>
           <Button
             className={classes.emptyButton}
             type="button"
@@ -60,7 +68,8 @@ const Cart = ({
             type="button"
             size="large"
             variant="contained"
-            color="primary" onClick={() => {
+            color="primary"
+            onClick={() => {
               setCheckoutError(null);
               setOrder(null);
             }}
@@ -69,7 +78,7 @@ const Cart = ({
           </Button>
         </div>
       </div>
-      <div style={{height:50}}/>
+      <div style={{ height: 50 }} />
     </React.Fragment>
   );
 
@@ -78,10 +87,15 @@ const Cart = ({
   return (
     <Container>
       <div className={classes.toolbar} />
-      <Typography className={classes.title} variant="h2" gutterBottom align="center">
+      <Typography
+        className={classes.title}
+        variant="h2"
+        gutterBottom
+        align="center"
+      >
         Shopping Cart
       </Typography>
-      <div style={{height: 30}}/>
+      <div style={{ height: 30 }} />
       {!cart.line_items.length ? <EmptyCart /> : <FilledCart />}
     </Container>
   );

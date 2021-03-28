@@ -1,10 +1,13 @@
 import React from "react";
 import Typography from "@material-ui/core/Typography";
-import Button from "@material-ui/core/Button";
 import Card from "@material-ui/core/Card";
 import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
 import CardMedia from "@material-ui/core/CardMedia";
+import IconButton from "@material-ui/core/IconButton";
+import RemoveShoppingCartIcon from "@material-ui/icons/RemoveShoppingCart";
+import RemoveIcon from "@material-ui/icons/Remove";
+import AddIcon from "@material-ui/icons/Add";
 
 import useStyles from "./styles";
 
@@ -19,37 +22,35 @@ const CartItem = ({ item, onUpdateCartItemQty, onRemoveCartItem }) => {
         className={classes.media}
       ></CardMedia>
       <CardContent className={classes.cardContent}>
-        <Typography variant="h4">{item.name}</Typography>
-        <Typography variant="h5">
+        <Typography variant="h5">{item.name}</Typography>
+        <Typography variant="h6" color="primary">
           {item.line_total.formatted_with_symbol}
         </Typography>
       </CardContent>
       <CardActions className={classes.cardActions}>
         <div className={classes.buttons}>
-          <Button
-            type="button"
-            size="small"
+          <IconButton
+            aria-label="remove"
             onClick={() => onUpdateCartItemQty(item.id, item.quantity - 1)}
+            color="secondary"
           >
-            -
-          </Button>
-          <Typography>{item.quantity}</Typography>
-          <Button
-            type="button"
-            size="small"
+            <RemoveIcon />
+          </IconButton>
+          <Typography variant="h6">{item.quantity}</Typography>
+          <IconButton
+            aria-label="add"
             onClick={() => onUpdateCartItemQty(item.id, item.quantity + 1)}
+            color="secondary"
           >
-            +
-          </Button>
+            <AddIcon />
+          </IconButton>
         </div>
-        <Button
-          variant="contained"
-          type="button"
-          color="secondary"
+        <IconButton
+          aria-label="Remove"
           onClick={() => onRemoveCartItem(item.id)}
         >
-          Remove
-        </Button>
+          <RemoveShoppingCartIcon style={{ fontSize: 30 }} />
+        </IconButton>
       </CardActions>
     </Card>
   );

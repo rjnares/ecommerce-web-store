@@ -8,4 +8,9 @@ export default makeStyles((theme) => ({
     height: "100vh",
     paddingTop: "100px",
   },
+  title: {
+    [theme.breakpoints.down("sm")]: {
+      fontSize: "1.75rem",
+    },
+  },
 }));

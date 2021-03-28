@@ -6,16 +6,23 @@ export default makeStyles((theme) => ({
   appBar: {
     boxShadow: "none",
     borderBottom: "1px solid rgba(0, 0, 0, 0.12)",
-    [theme.breakpoints.up("sm")]: {
-      width: `calc(100% - ${drawerWidth}px)`,
-      marginLeft: drawerWidth,
+    // [theme.breakpoints.up("sm")]: {
+    //   width: `calc(100% - ${drawerWidth}px)`,
+    //   marginLeft: drawerWidth,
+    // },
+    [theme.breakpoints.down("sm")]: {
+      display: "flex",
+      alignItems: "center",
     },
   },
   title: {
-    alignItems: "center",
     display: "flex",
+    alignItems: "center",
     textDecoration: "none",
     color: "#fff",
+    [theme.breakpoints.down("sm")]: {
+      fontSize: "1.5rem",
+    },
   },
   image: {
     marginRight: "10px",
