@@ -61,4 +61,8 @@ export default makeStyles((theme) => ({
     display: "flex",
     justifyContent: "space-evenly",
   },
+  confirmationError: {
+    display: "flex",
+    flexDirection: "column",
+  },
 }));

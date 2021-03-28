@@ -5,7 +5,8 @@ import Step from "@material-ui/core/Step";
 import StepLabel from "@material-ui/core/StepLabel";
 import Typography from "@material-ui/core/Typography";
 import CircularProgress from "@material-ui/core/CircularProgress";
-import CheckCircleIcon from '@material-ui/icons/CheckCircle';import Button from "@material-ui/core/Button";
+import CheckCircleIcon from "@material-ui/icons/CheckCircle";
+import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import { Link, useHistory } from "react-router-dom";
 
@@ -17,41 +18,50 @@ import { commerce } from "../../../lib/commerce";
 
 const steps = ["Shipping address", "Payment details"];
 
-const Checkout = ({ cart, onCaptureCheckout, checkoutErrorMsg }) => {
+const Checkout = ({ cart, onCaptureCheckout, checkoutError }) => {
   const [activeStep, setActiveStep] = useState(0);
   const [checkoutToken, setCheckoutToken] = useState(null);
   const [shippingData, setShippingData] = useState({});
   const [isFinished, setIsFinished] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [orderError, setOrderError] = useState("");
+  const [orderError, setOrderError] = useState(null);
 
   const classes = useStyles();
   const history = useHistory();
 
-  useEffect(() => {
-    sessionStorage.removeItem("order_error");
-  }, []);
-
-  useEffect(() => {
-    setOrderError(JSON.parse(sessionStorage.getItem("order_error")));
-  }, [checkoutErrorMsg]);
+  useLayoutEffect(() => {
+    setOrderError(checkoutError);
+  }, [checkoutError]);
 
   let Confirmation = () =>
-    orderError ? (
-      <React.Fragment>
-        <Typography  align="center" variant="h5">Error: {checkoutErrorMsg}</Typography>
-        <br />
-        <Button component={Link} to="/" variant="contained" type="button" color="secondary">
+    isFinished &&
+    checkoutError &&
+    orderError &&
+    checkoutError.message === orderError.message &&
+    checkoutError.type === orderError.type ? (
+      <div className={classes.confirmationError}>
+        <Typography align="center" variant="h5">
+          Error: {orderError.message}
+        </Typography>
+        <div style={{ height: 50 }} />
+        <Button
+          style={{ margin: "auto" }}
+          component={Link}
+          to="/"
+          variant="contained"
+          type="button"
+          color="primary"
+        >
           Back to Home
         </Button>
-      </React.Fragment>
+      </div>
     ) : (
       <div className={classes.confirmationSuccess}>
         <Typography variant="h5" gutterBottom>
           Thank you for your order!
         </Typography>
         <div className={classes.icon}>
-          <CheckCircleIcon style={{fontSize:50}}/>
+          <CheckCircleIcon style={{ fontSize: 50 }} />
         </div>
         <div
           style={{
@@ -60,7 +70,13 @@ const Checkout = ({ cart, onCaptureCheckout, checkoutErrorMsg }) => {
             width: "100%",
           }}
         >
-          <Button component={Link} to="/" variant="contained" type="button" color="secondary" >
+          <Button
+            component={Link}
+            to="/"
+            variant="contained"
+            type="button"
+            color="secondary"
+          >
             Back to Home
           </Button>
           <Button

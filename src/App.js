@@ -16,7 +16,7 @@ const App = () => {
   const [cart, setCart] = useState({});
   const [order, setOrder] = useState({});
   const [loading, setLoading] = useState(true);
-  const [checkoutErrorMsg, setCheckoutErrorMsg] = useState("");
+  const [checkoutError, setCheckoutError] = useState(null);
 
   const fetchProducts = async () => {
     await commerce.products
@@ -106,6 +106,9 @@ const App = () => {
         // Save the order into state
         setOrder(order);
 
+        // Set checkout error to update Checkout component
+        setCheckoutError(null);
+
         // Clear the cart
         refreshCart();
 
@@ -117,9 +120,8 @@ const App = () => {
         sessionStorage.setItem("order_receipt", JSON.stringify(order));
       })
       .catch((error) => {
-        setCheckoutErrorMsg(error.data.error.message);
-        sessionStorage.setItem("order_error", JSON.stringify(error.data.error));
         console.log("There was an error confirming your order", error);
+        setCheckoutError(error.data.error);
       });
   };
 
@@ -153,7 +155,7 @@ const App = () => {
               cart={cart}
               order={order}
               onCaptureCheckout={handleCaptureCheckout}
-              checkoutErrorMsg={checkoutErrorMsg}
+              checkoutError={checkoutError}
             />
           </Route>
           <Route exact path="/view-order">
