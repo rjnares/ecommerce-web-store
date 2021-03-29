@@ -87,7 +87,7 @@ const PaymentForm = ({
               <br />
               <br />
               <div style={{ display: "flex", justifyContent: "space-between" }}>
-                <Button variant="outlined" onClick={backStep}>
+                <Button color="secondary" variant="contained" onClick={backStep}>
                   Back
                 </Button>
                 <Button

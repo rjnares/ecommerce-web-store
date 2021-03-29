@@ -147,10 +147,11 @@ const AddressForm = ({ checkoutToken, next }) => {
             <FormInput name="zip" label="ZIP / Postal code" />
             {loading ? (
               <div
-                styles={{
+                style={{
                   display: "flex",
                   justifyContent: "center",
                   alignItems: "center",
+                  margin: "auto"
                 }}
               >
                 <CircularProgress />
@@ -207,7 +208,7 @@ const AddressForm = ({ checkoutToken, next }) => {
           </Grid>
           <br />
           <div style={{ display: "flex", justifyContent: "space-between" }}>
-            <Button component={Link} to="/cart" variant="outlined">
+            <Button component={Link} to="/cart" variant="contained" color="secondary">
               Back to Cart
             </Button>
             <Button type="submit" color="primary" variant="contained">

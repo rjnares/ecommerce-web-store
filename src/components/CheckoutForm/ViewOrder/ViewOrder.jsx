@@ -78,7 +78,7 @@ const ViewOrder = () => {
             <Typography variant="h4" align="center" gutterBottom>
               Oops!
             </Typography>
-            <ErrorOutlineIcon color="error" style={{ fontSize: 50 }} />
+            <ErrorOutlineIcon color="secondary" style={{ fontSize: 50 }} />
             <div style={{ height: 20 }} />
             <Typography variant="h4" align="center">
               Error: no order info
