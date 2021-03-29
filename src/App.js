@@ -18,10 +18,12 @@ const App = () => {
   const [order, setOrder] = useState(null);
   const [productsLoading, setProductsLoading] = useState(true);
   const [productsError, setProductsError] = useState(false);
+  const [cartLoading, setCartLoading] = useState(true);
+  const [cartError, setCartError] = useState(false);
   const [checkoutError, setCheckoutError] = useState(null);
 
   const fetchTimeout = async (fetch) => {
-    // Used to show loading state while products are fetched
+    // Used to show loading state while API requests resolve
     setTimeout(fetch, 1000);
   };
 
@@ -44,10 +46,13 @@ const App = () => {
       .retrieve()
       .then((cart) => {
         setCart(cart);
+        setCartError(false);
       })
       .catch((error) => {
         console.error("There was an error fetching the cart", error);
-      });
+        setCartError(true);
+      })
+      .finally(() => setCartLoading(false));
   };
 
   const handleAddToCart = async (productId, quantity) => {
@@ -132,9 +137,8 @@ const App = () => {
   };
 
   useEffect(() => {
-    // fetchProducts();
     fetchTimeout(fetchProducts);
-    fetchCart();
+    fetchTimeout(fetchCart);
   }, []);
 
   return (
@@ -145,21 +149,31 @@ const App = () => {
           <Route exact path="/">
             {productsLoading ? (
               <LoadingState msg={"Fetching Products"} />
+            ) : cartLoading ? (
+              <LoadingState msg={"Fetching Cart"} />
             ) : productsError ? (
               <ErrorState msg={"failed to fetch products"} />
+            ) : cartError ? (
+              <ErrorState msg={"failed to fetch cart"} />
             ) : (
               <Products products={products} onAddToCart={handleAddToCart} />
             )}
           </Route>
           <Route exact path="/cart">
-            <Cart
-              cart={cart}
-              handleUpdateCartItemQty={handleUpdateCartItemQty}
-              handleRemoveCartItem={handleRemoveCartItem}
-              handleEmptyCart={handleEmptyCart}
-              setCheckoutError={setCheckoutError}
-              setOrder={setOrder}
-            />
+            {cartLoading ? (
+              <LoadingState msg={"Fetching Cart"} />
+            ) : cartError ? (
+              <ErrorState msg={"failed to fetch cart"} />
+            ) : (
+              <Cart
+                cart={cart}
+                handleUpdateCartItemQty={handleUpdateCartItemQty}
+                handleRemoveCartItem={handleRemoveCartItem}
+                handleEmptyCart={handleEmptyCart}
+                setCheckoutError={setCheckoutError}
+                setOrder={setOrder}
+              />
+            )}
           </Route>
           <Route exact path="/checkout">
             <Checkout
