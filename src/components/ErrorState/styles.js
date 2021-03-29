@@ -25,11 +25,4 @@ export default makeStyles((theme) => ({
     flexDirection: "column",
     marginBottom: "50px",
   },
-  divider: {
-    margin: "20px 0",
-    borderBottom: "1px solid black",
-  },
-  footer: {
-    height: "60px",
-  },
 }));

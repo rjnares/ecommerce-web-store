@@ -6,7 +6,7 @@ import Button from "@material-ui/core/Button";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
-import ErrorOutlineIcon from "@material-ui/icons/ErrorOutline";
+import ErrorState from "../../ErrorState/ErrorState"
 
 import { Link } from "react-router-dom";
 
@@ -70,32 +70,7 @@ const ViewOrder = () => {
       </main>
     </React.Fragment>
   ) : (
-    <React.Fragment>
-      <div className={classes.toolbar} />
-      <main className={classes.content}>
-        <div className={classes.layout}>
-          <div className={classes.header}>
-            <Typography variant="h4" align="center" gutterBottom>
-              Oops!
-            </Typography>
-            <ErrorOutlineIcon color="secondary" style={{ fontSize: 50 }} />
-            <div style={{ height: 20 }} />
-            <Typography variant="h4" align="center">
-              Error: no order info
-            </Typography>
-          </div>
-          <Button
-            component={Link}
-            to="/"
-            variant="contained"
-            color="primary"
-            type="button"
-          >
-            Back to Home
-          </Button>
-        </div>
-      </main>
-    </React.Fragment>
+      <ErrorState msg={"no order info"}/>
   );
 };
 

@@ -8,6 +8,7 @@ import {
   Cart,
   Checkout,
   LoadingState,
+  ErrorState,
   ViewOrder,
 } from "./components";
 
@@ -15,19 +16,27 @@ const App = () => {
   const [products, setProducts] = useState([]);
   const [cart, setCart] = useState({});
   const [order, setOrder] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [productsLoading, setProductsLoading] = useState(true);
+  const [productsError, setProductsError] = useState(false);
   const [checkoutError, setCheckoutError] = useState(null);
+
+  const fetchTimeout = async (fetch) => {
+    // Used to show loading state while products are fetched
+    setTimeout(fetch, 1000);
+  };
 
   const fetchProducts = async () => {
     await commerce.products
       .list()
       .then((products) => {
         setProducts(products.data);
+        setProductsError(false);
       })
       .catch((error) => {
         console.log("There was an error fetching the products", error);
+        setProductsError(true);
       })
-      .finally(() => setLoading(false));
+      .finally(() => setProductsLoading(false));
   };
 
   const fetchCart = async () => {
@@ -123,7 +132,8 @@ const App = () => {
   };
 
   useEffect(() => {
-    fetchProducts();
+    // fetchProducts();
+    fetchTimeout(fetchProducts);
     fetchCart();
   }, []);
 
@@ -133,8 +143,10 @@ const App = () => {
         <Navbar totalItems={cart.total_items} />
         <Switch>
           <Route exact path="/">
-            {loading ? (
+            {productsLoading ? (
               <LoadingState msg={"Fetching Products"} />
+            ) : productsError ? (
+              <ErrorState msg={"failed to fetch products"} />
             ) : (
               <Products products={products} onAddToCart={handleAddToCart} />
             )}
