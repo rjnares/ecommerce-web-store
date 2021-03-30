@@ -14,13 +14,11 @@ const theme = createMuiTheme({
       light: orange[100],
       main: orange[500],
       dark: orange[800],
-      contrastText: grey[900],
     },
     secondary: {
       light: grey[100],
       main: grey[500],
       dark: grey[700],
-      contrastText: grey[900],
     },
   },
 });

@@ -24,12 +24,8 @@ const Navbar = ({ totalItems }) => {
             variant="h4"
             className={classes.title}
           >
-            <img
-              src={logo}
-              alt="CommerceJS"
-              className={classes.image}
-            />
-            Rob's Tech
+            <img src={logo} alt="Tech Cycle" className={classes.image} />
+            TechCycle
           </Typography>
           <div className={classes.grow}></div>
 
@@ -39,9 +35,9 @@ const Navbar = ({ totalItems }) => {
                 component={Link}
                 to="/cart"
                 aria-label="Shopping Cart"
-                >
+              >
                 <Badge badgeContent={totalItems} color="primary">
-                  <ShoppingCartIcon style={{fontSize:30}}/>
+                  <ShoppingCartIcon style={{ fontSize: 30 }} />
                 </Badge>
               </IconButton>
             </div>
