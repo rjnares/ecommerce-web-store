@@ -19,30 +19,32 @@ const Product = ({ product, onAddToCart }) => {
         image={product.media.source}
         title={product.name}
       ></CardMedia>
-      <CardContent>
-        <div className={classes.cardContent}>
-          <Typography variant="h5" gutterBottom>
-            {product.name}
-          </Typography>
-          <Typography variant="h6" color="primary">
-            {product.price.formatted_with_symbol}
-          </Typography>
-        </div>
-        <Typography
-          dangerouslySetInnerHTML={{ __html: product.description }}
-          variant="body1"
-          color="secondary"
-          align="center"
-        ></Typography>
-      </CardContent>
-      <CardActions disableSpacing className={classes.cardActions}>
-        <IconButton
-          aria-label="Add to Cart"
-          onClick={() => onAddToCart(product.id, 1)}
-        >
-          <AddShoppingCartIcon style={{fontSize:30}}/>
-        </IconButton>
-      </CardActions>
+      <div className={classes.cardBottom}>
+        <CardContent>
+          <div className={classes.cardContent}>
+            <Typography variant="h5" gutterBottom>
+              {product.name}
+            </Typography>
+            <Typography variant="h6" color="primary">
+              {product.price.formatted_with_symbol}
+            </Typography>
+          </div>
+          <Typography
+            dangerouslySetInnerHTML={{ __html: product.description }}
+            variant="body1"
+            color="secondary"
+            align="center"
+          ></Typography>
+        </CardContent>
+        <CardActions disableSpacing className={classes.cardActions}>
+          <IconButton
+            aria-label="Add to Cart"
+            onClick={() => onAddToCart(product.id, 1)}
+          >
+            <AddShoppingCartIcon style={{ fontSize: 30 }} />
+          </IconButton>
+        </CardActions>
+      </div>
     </Card>
   );
 };

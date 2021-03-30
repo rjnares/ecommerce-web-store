@@ -11,12 +11,12 @@ const theme = createMuiTheme({
   palette: {
     type: "dark",
     primary: {
-      light: orange[100],
-      main: orange[500],
-      dark: orange[800],
+      light: orange[200],
+      main: orange[600],
+      dark: orange[900],
     },
     secondary: {
-      light: grey[100],
+      light: grey[200],
       main: grey[500],
       dark: grey[700],
     },

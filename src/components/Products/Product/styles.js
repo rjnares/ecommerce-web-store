@@ -5,6 +5,8 @@ export default makeStyles((theme) => ({
     // maxWidth: 345, original width style
     maxWidth: "100%",
     height: "100%",
+    display: "flex",
+    flexDirection: "column",
   },
   media: {
     height: 0,
@@ -21,5 +23,12 @@ export default makeStyles((theme) => ({
   cardActions: {
     display: "flex",
     justifyContent: "flex-end",
+    alignItems: "flex-end",
+    flex: 1,
+  },
+  cardBottom: {
+    display: "flex",
+    flexDirection: "column",
+    flex: 1,
   },
 }));
