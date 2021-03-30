@@ -43,7 +43,7 @@ const Navbar = ({ totalItems }) => {
           )}
           <div className={classes.grow}></div>
           <div style={{ marginLeft: "8px" }}>
-            <Button color="primary" variant="outlined" size="small">
+            <Button component={Link} to="/view-order" type="button" color="primary" variant="outlined" size="small">
               <Typography color="primary" variant="body2">
                 View Order
               </Typography>
