@@ -27,7 +27,7 @@ export default makeStyles((theme) => ({
   },
   divider: {
     margin: "20px 0",
-    borderBottom: "1px solid black",
+    borderBottom: "1px solid white",
   },
   footer: {
     height: "60px",
