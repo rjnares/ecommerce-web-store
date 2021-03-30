@@ -10,4 +10,10 @@ export default makeStyles((theme) => ({
   root: {
     flexGrow: 1,
   },
+  title: {
+    margintop: "30px",
+    [theme.breakpoints.down("sm")]: {
+      fontSize: "2.25rem",
+    },
+  },
 }));
