@@ -5,6 +5,7 @@ import IconButton from "@material-ui/core/IconButton";
 import Badge from "@material-ui/core/Badge";
 import Typography from "@material-ui/core/Typography";
 import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
+import Button from "@material-ui/core/Button";
 import { Link, useLocation } from "react-router-dom";
 
 import logo from "../../assets/tech-logo.png";
@@ -27,8 +28,6 @@ const Navbar = ({ totalItems }) => {
             <img src={logo} alt="Tech Cycle" className={classes.image} />
             TechCycle
           </Typography>
-          <div className={classes.grow}></div>
-
           {location.pathname === "/" && (
             <div>
               <IconButton
@@ -42,6 +41,14 @@ const Navbar = ({ totalItems }) => {
               </IconButton>
             </div>
           )}
+          <div className={classes.grow}></div>
+          <div style={{ marginLeft: "8px" }}>
+            <Button color="primary" variant="outlined" size="small">
+              <Typography color="primary" variant="body2">
+                View Order
+              </Typography>
+            </Button>
+          </div>
         </Toolbar>
       </AppBar>
     </React.Fragment>

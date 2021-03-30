@@ -21,6 +21,10 @@ export default makeStyles((theme) => ({
   image: {
     marginRight: "10px",
     width: 40,
+    [theme.breakpoints.down("sm")]: {
+      width: 30,
+      marginRight: "5px",
+    },
   },
   grow: {
     flexGrow: 1,
