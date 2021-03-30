@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 import Typography from "@material-ui/core/Typography";
 import Divider from "@material-ui/core/Divider";
@@ -6,17 +6,21 @@ import Button from "@material-ui/core/Button";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
-import ErrorState from "../../ErrorState/ErrorState"
+import ErrorState from "../../ErrorState/ErrorState";
+import LoadingState from "../../LoadingState/LoadingState";
 
 import { Link } from "react-router-dom";
 
 import useStyles from "./styles";
 
 const ViewOrder = () => {
+  const [loading, setLoading] = useState(true);
   const orderReceipt = JSON.parse(sessionStorage.getItem("order_receipt"));
   const classes = useStyles();
 
-  return orderReceipt ? (
+  return loading && setTimeout(() => setLoading(false), 1000) ? (
+    <LoadingState msg={"Fetching Order"} />
+  ) : orderReceipt ? (
     <React.Fragment>
       <div className={classes.toolbar} />
       <main className={classes.layout}>
@@ -70,7 +74,7 @@ const ViewOrder = () => {
       </main>
     </React.Fragment>
   ) : (
-      <ErrorState msg={"no order info"}/>
+    <ErrorState msg={"no order info"} />
   );
 };
 
