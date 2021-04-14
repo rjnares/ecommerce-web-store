@@ -4,6 +4,8 @@
 
 TechCycle is a responsive, dynamic web application that offers users a seamless eCommerce experience.
 
+![TechCycle Home](https://raw.githubusercontent.com/rjnares/ecommerce-web-store/main/techcycle-home.JPG)
+
 ## Motivation
 
 This project was designed to demo the integration of Commerce.js and Stripe.js into a React.js app to streamline storefront/cart/checkout creation. Commerce.js offers a headless, customizable eCommerce platform that simplifies the development process by offering back-end functionality through its API. Stripe.js is a JavaScript library for building payment flows by tokenizing user sensitive information. Best of all, Commerce.js and Stripe.js can be easily used in tandem, completely eliminating the need for a server or database!
